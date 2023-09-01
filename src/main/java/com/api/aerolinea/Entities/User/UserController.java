@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/users")
 public class UserController {
     private final UserService userService;
 
@@ -15,7 +15,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/getAll")
+    @GetMapping()
     public ResponseEntity<List<User>> getUsuarios() {
         return ResponseEntity.ok(userService.getUsuarios());
     }

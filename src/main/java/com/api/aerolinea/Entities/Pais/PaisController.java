@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/pais")
+@RequestMapping("/api/paises")
 public class PaisController {
     private final PaisService paisService;
 
@@ -14,7 +14,7 @@ public class PaisController {
         this.paisService = paisService;
     }
 
-    @GetMapping("/getAll")
+    @GetMapping
     public ResponseEntity<List<Pais>> getPaises() {
         return ResponseEntity.ok(paisService.getPaises());
     }

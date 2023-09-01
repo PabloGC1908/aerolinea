@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/aerolinea")
+@RequestMapping("api/aerolineas")
 public class AerolineaController {
     private final AerolineaService aerolineaService;
 
@@ -15,7 +15,7 @@ public class AerolineaController {
         this.aerolineaService = aerolineaService;
     }
 
-    @GetMapping("/getAll")
+    @GetMapping
     public List<Aerolinea> getAerolineas() {
         return aerolineaService.getAerolineas();
     }

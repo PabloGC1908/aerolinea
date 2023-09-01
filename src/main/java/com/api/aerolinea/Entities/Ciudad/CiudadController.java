@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/ciudad")
+@RequestMapping("api/ciudades")
 public class CiudadController {
     private final CiudadService ciudadService;
 
@@ -16,12 +16,12 @@ public class CiudadController {
         this.ciudadService = ciudadService;
     }
 
-    @GetMapping("/getAll")
+    @GetMapping
     public List<Ciudad> getCiudades() {
         return ciudadService.getCiudades();
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     public List<Ciudad> getCiudadesPorPais(@PathVariable Integer id) {
         return ciudadService.findCiudadesPorPais(id);
     }

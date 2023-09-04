@@ -1,7 +1,9 @@
 package com.api.aerolinea.Controllers;
 
+import com.api.aerolinea.DTOs.CiudadDTO;
 import com.api.aerolinea.Entities.Ciudad;
 import com.api.aerolinea.Services.CiudadService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +21,7 @@ public class CiudadController {
     }
 
     @GetMapping
-    public List<Ciudad> getCiudades() {
+    public ResponseEntity<List<CiudadDTO>> getCiudades() {
         return ciudadService.getCiudades();
     }
 

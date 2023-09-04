@@ -51,9 +51,11 @@ public class VueloService {
                     (String) result[1],
                     (String) result[2],
                     (String) result[3],
-                    (Date) result[4],
+                    (Integer) result[4],
                     (Date) result[5],
-                    (Float) result[6]
+                    (Date) result[6],
+                    (Float) result[7]
+
             );
 
             vuelos.add(vuelo);
@@ -64,7 +66,19 @@ public class VueloService {
 
     public ResponseEntity<Object> getVuelo(UUID uuid) {
         try {
-            Object vuelo = vueloRepository.findVueloConDetallesPorId(uuid).get(0);
+            Object[] result = vueloRepository.findVueloConDetallesPorId(uuid).get(0);
+            VueloDTO vuelo = new VueloDTO(
+                    (UUID) result[0],
+                    (String) result[1],
+                    (String) result[2],
+                    (String) result[3],
+                    (Integer) result[4],
+                    (Date) result[5],
+                    (Date) result[6],
+                    (Float) result[7]
+            );
+
+
             return ResponseEntity.ok(vuelo);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body("Id no valido");
@@ -141,7 +155,7 @@ public class VueloService {
 
     public ResponseEntity<String> deleteVuelo(UUID uuid) {
         vueloRepository.deleteById(uuid);
-        return ResponseEntity.ok("Vuelo eliminado exitosamente");
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Vuelo eliminado exitosamente");
     }
 
 }

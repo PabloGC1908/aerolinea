@@ -16,6 +16,7 @@ public interface VueloRepository extends JpaRepository<Vuelo, UUID> {
             " a.aerolinea AS aerolinea," +
             " c_o.ciudad AS ciudadOrigen," +
             " c_d.ciudad AS ciudadDestino," +
+            " vuelo.cantidadPasajes as cantidadPasajeros," +
             " vuelo.fechaIda AS fechaIda," +
             " vuelo.fechaVuelta AS fechaVuelta," +
             " vuelo.precio as precio" +
@@ -29,6 +30,7 @@ public interface VueloRepository extends JpaRepository<Vuelo, UUID> {
             " a.aerolinea AS aerolinea," +
             " c_o.ciudad AS ciudadOrigen," +
             " c_d.ciudad AS ciudadDestino," +
+            " vuelo.cantidadPasajes as cantidadPasajeros," +
             " vuelo.fechaIda AS fechaIda," +
             " vuelo.fechaVuelta AS fechaVuelta," +
             " vuelo.precio as precio" +

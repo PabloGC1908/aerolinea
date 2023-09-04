@@ -12,4 +12,7 @@ import java.util.List;
 public interface CiudadRepository extends JpaRepository<Ciudad, Integer> {
     @Query(value = "SELECT c.ciudad FROM Ciudad c WHERE :id = c.pais")
     List<Ciudad> findAllCityInPais(@Param("id") Integer id);
+
+    @Query("SELECT c.id, c.ciudad FROM Ciudad c ORDER BY c.id")
+    List<Object[]> findAllCities();
 }

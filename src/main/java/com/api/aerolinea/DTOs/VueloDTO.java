@@ -8,8 +8,10 @@ public record VueloDTO (
         String aerolinea,
         String ciudadOrigen,
         String ciudadDestino,
+        Integer cantidadPasajeros,
         Date fechaIda,
         Date fechaVuelta,
         Float precio
+
 ) {
 }

@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/vuelos")
@@ -22,44 +21,31 @@ public class VueloController {
 
     @GetMapping
     public ResponseEntity<List<VueloDTO>> getVuelos() {
-        List<VueloDTO> vuelos = vueloService.getVuelos();
-
-        if (!vuelos.isEmpty())
-            return ResponseEntity.ok(vuelos);
-
-        return ResponseEntity.noContent().build();
+        return vueloService.getVuelos();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getVuelo(@Valid @PathVariable String id) {
-        try {
-            UUID uuid = UUID.fromString(id);
-            Object vuelo = vueloService.getVuelo(uuid);
-            return ResponseEntity.ok(vuelo);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body("Id no valido");
-        }
+        return vueloService.getVuelo(id);
     }
 
     @PostMapping
     @Transactional
-    public ResponseEntity<String> postVuelo(@RequestBody VueloRegistroDTO vuelo) {
+    public ResponseEntity<String> postVuelo(@Valid @RequestBody VueloRegistroDTO vuelo) {
 
         return vueloService.postVuelo(vuelo);
     }
 
-    // TODO
     @PatchMapping("/{id}")
     @Transactional
-    public ResponseEntity<String> patchVuelo(@PathVariable String id) {
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<String> patchVuelo(@Valid @RequestBody VueloRegistroDTO vuelo, @PathVariable String id) {
+        return vueloService.patchVuelo(vuelo, id);
     }
 
-    // TODO
     @DeleteMapping("/{id}")
     @Transactional
-    public ResponseEntity<String> deleteVuelo(@PathVariable String id) {
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<String> deleteVuelo(@Valid @PathVariable String id) {
+        return vueloService.deleteVuelo(id);
     }
 
 

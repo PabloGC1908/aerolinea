@@ -15,10 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class VueloService {
@@ -35,7 +32,16 @@ public class VueloService {
         this.ciudadRepository = ciudadRepository;
     }
 
-    public List<VueloDTO> getVuelos() {
+    public ResponseEntity<List<VueloDTO>> getVuelos() {
+        List<VueloDTO> vuelos = listarVuelos();
+
+        if (!vuelos.isEmpty())
+            return ResponseEntity.ok(vuelos);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    private List<VueloDTO> listarVuelos() {
         List<Object[]> results = vueloRepository.findAllVuelosConAerolineaYCiudades();
         List<VueloDTO> vuelos = new ArrayList<>();
 
@@ -56,29 +62,28 @@ public class VueloService {
         return vuelos;
     }
 
-    public Object getVuelo(UUID uuid) {
-        return vueloRepository.findVueloPorId(uuid).get(0);
+    public ResponseEntity<Object> getVuelo(String id) {
+        try {
+            UUID uuid = UUID.fromString(id);
+            Object vuelo = vueloRepository.findVueloConDetallesPorId(uuid).get(0);
+            return ResponseEntity.ok(vuelo);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("Id no valido");
+        }
     }
 
     public ResponseEntity<String> postVuelo(VueloRegistroDTO vueloRegistro) {
         try {
-            Vuelo vuelo = new Vuelo();
-            vuelo.setUuid(UUID.randomUUID());
-            vuelo.setPrecio(vueloRegistro.precio());
-            vuelo.setFechaIda(parseDate(vueloRegistro.fechaIda()));
-            vuelo.setFechaVuelta(parseDate(vueloRegistro.fechaVuelta()));
-
-            Aerolinea aerolinea = aerolineaRepository.findById(vueloRegistro.aerolineaId())
-                    .orElseThrow(ChangeSetPersister.NotFoundException::new);
-            vuelo.setAerolinea(aerolinea);
-
-            Ciudad ciudadOrigen = ciudadRepository.findById(vueloRegistro.ciudadOrigenId())
-                    .orElseThrow(ChangeSetPersister.NotFoundException::new);
-            vuelo.setCiudadOrigen(ciudadOrigen);
-
-            Ciudad ciudadDestino = ciudadRepository.findById(vueloRegistro.ciudadDestinoId())
-                    .orElseThrow(ChangeSetPersister.NotFoundException::new);
-            vuelo.setCiudadDestino(ciudadDestino);
+            Vuelo vuelo = Vuelo.builder()
+                    .uuid(UUID.randomUUID())
+                    .precio(vueloRegistro.precio())
+                    .ciudadOrigen(buscarCiudad(vueloRegistro.ciudadOrigenId()))
+                    .ciudadDestino(buscarCiudad(vueloRegistro.ciudadDestinoId()))
+                    .aerolinea(buscarAerolinea(vueloRegistro.aerolineaId()))
+                    .cantidadPasajes(vueloRegistro.cantidadPasajeros())
+                    .fechaIda(parseFecha(vueloRegistro.fechaIda()))
+                    .fechaVuelta(parseFecha(vueloRegistro.fechaVuelta()))
+                    .build();
 
             vueloRepository.save(vuelo);
 
@@ -92,7 +97,7 @@ public class VueloService {
         }
     }
 
-    private Date parseDate(String fecha) {
+    private Date parseFecha(String fecha) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
 
         try {
@@ -102,5 +107,48 @@ public class VueloService {
         }
     }
 
+    private Ciudad buscarCiudad(Integer id) throws ChangeSetPersister.NotFoundException {
+        return ciudadRepository.findById(id).orElseThrow(ChangeSetPersister.NotFoundException::new);
+    }
+
+    private Aerolinea buscarAerolinea(Integer id) throws ChangeSetPersister.NotFoundException {
+        return aerolineaRepository.findById(id).orElseThrow(ChangeSetPersister.NotFoundException::new);
+    }
+
+    public ResponseEntity<String> patchVuelo(VueloRegistroDTO vueloRegistro, String id) {
+        UUID uuid = UUID.fromString(id);
+        Optional<Vuelo> vuelo = vueloRepository.findById(uuid);
+
+        if (vuelo.isPresent()) {
+            try {
+                Vuelo vueloModificado = vuelo.get();
+                vueloModificado.setAerolinea(buscarAerolinea(vueloRegistro.aerolineaId()));
+                vueloModificado.setCiudadOrigen(buscarCiudad(vueloRegistro.ciudadOrigenId()));
+                vueloModificado.setCiudadDestino(buscarCiudad(vueloRegistro.ciudadDestinoId()));
+                vueloModificado.setPrecio(vueloRegistro.precio());
+                vueloModificado.setCantidadPasajes(vueloRegistro.cantidadPasajeros());
+                vueloModificado.setFechaIda(parseFecha(vueloRegistro.fechaIda()));
+                vueloModificado.setFechaVuelta(parseFecha(vueloRegistro.fechaVuelta()));
+
+                vueloRepository.save(vueloModificado);
+
+                return ResponseEntity.status(HttpStatus.ACCEPTED).body("Vuelo modificado exitosamente");
+            } catch (ChangeSetPersister.NotFoundException e) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(e.getMessage());
+            }
+        } else
+            return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).body("Vuelo no encontrado");
+    }
+
+    public ResponseEntity<String> deleteVuelo(String id) {
+        try {
+            UUID uuid = UUID.fromString(id);
+            vueloRepository.deleteById(uuid);
+            return ResponseEntity.ok("Vuelo eliminado exitosamente");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("Id no valido");
+        }
+    }
 
 }

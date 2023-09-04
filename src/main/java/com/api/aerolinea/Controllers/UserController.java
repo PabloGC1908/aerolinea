@@ -1,7 +1,10 @@
 package com.api.aerolinea.Controllers;
 
+import com.api.aerolinea.DTOs.UserDTO;
 import com.api.aerolinea.Entities.User;
 import com.api.aerolinea.Services.UserService;
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,12 +22,24 @@ public class UserController {
 
     @GetMapping()
     public ResponseEntity<List<User>> getUsuarios() {
-        return ResponseEntity.ok(userService.getUsuarios());
+        return userService.getUsuarios();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUsuario(@PathVariable UUID id) {
-        return ResponseEntity.ok(userService.getUsuario(id));
+        return userService.getUsuario(id);
+    }
+
+    @PostMapping
+    @Transactional
+    public ResponseEntity<String> postUsuario(@Valid @RequestBody UserDTO user) {
+        return userService.postUsuario(user);
+    }
+
+    @PatchMapping("/{id}")
+    @Transactional
+    public ResponseEntity<String> patchUsuario(@Valid @RequestBody UserDTO user, @PathVariable UUID id) {
+        return userService.patchUsuario(user, id);
     }
 
     @DeleteMapping("/{id}")

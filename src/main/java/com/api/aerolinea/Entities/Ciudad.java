@@ -1,7 +1,5 @@
-package com.api.aerolinea.Entities.Ciudad;
+package com.api.aerolinea.Entities;
 
-import com.api.aerolinea.Entities.Pais.Pais;
-import com.api.aerolinea.Entities.Vuelo.Vuelo;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

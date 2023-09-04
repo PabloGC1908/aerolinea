@@ -1,5 +1,7 @@
-package com.api.aerolinea.Entities.Ciudad;
+package com.api.aerolinea.Services;
 
+import com.api.aerolinea.Entities.Ciudad;
+import com.api.aerolinea.Repositories.CiudadRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

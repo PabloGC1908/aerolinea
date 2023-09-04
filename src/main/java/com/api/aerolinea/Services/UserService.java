@@ -1,5 +1,7 @@
-package com.api.aerolinea.Entities.User;
+package com.api.aerolinea.Services;
 
+import com.api.aerolinea.Entities.User;
+import com.api.aerolinea.Repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,5 +1,7 @@
-package com.api.aerolinea.Entities.Pais;
+package com.api.aerolinea.Controllers;
 
+import com.api.aerolinea.Entities.Pais;
+import com.api.aerolinea.Services.PaisService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

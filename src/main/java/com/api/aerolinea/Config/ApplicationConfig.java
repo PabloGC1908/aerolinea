@@ -1,6 +1,6 @@
 package com.api.aerolinea.Config;
 
-import com.api.aerolinea.Entities.User.UserRepository;
+import com.api.aerolinea.Repositories.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

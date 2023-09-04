@@ -1,5 +1,7 @@
-package com.api.aerolinea.Entities.User;
+package com.api.aerolinea.Controllers;
 
+import com.api.aerolinea.Entities.User;
+import com.api.aerolinea.Services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,5 +1,6 @@
-package com.api.aerolinea.Entities.Aerolinea;
+package com.api.aerolinea.Repositories;
 
+import com.api.aerolinea.Entities.Aerolinea;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

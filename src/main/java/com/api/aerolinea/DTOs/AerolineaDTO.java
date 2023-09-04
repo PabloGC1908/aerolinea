@@ -1,4 +1,4 @@
-package com.api.aerolinea.Entities.Aerolinea;
+package com.api.aerolinea.DTOs;
 
 import jakarta.validation.constraints.NotBlank;
 

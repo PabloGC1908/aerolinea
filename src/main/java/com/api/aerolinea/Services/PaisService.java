@@ -1,5 +1,7 @@
-package com.api.aerolinea.Entities.Pais;
+package com.api.aerolinea.Services;
 
+import com.api.aerolinea.Entities.Pais;
+import com.api.aerolinea.Repositories.PaisRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,9 +1,9 @@
 package com.api.aerolinea.Security.Auth;
 
+import com.api.aerolinea.Entities.Role;
+import com.api.aerolinea.Entities.User;
+import com.api.aerolinea.Repositories.UserRepository;
 import com.api.aerolinea.Security.Jwt.JwtService;
-import com.api.aerolinea.Entities.User.Role;
-import com.api.aerolinea.Entities.User.User;
-import com.api.aerolinea.Entities.User.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,10 +31,14 @@ public class AuthService {
     public AuthResponse login(LoginRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.email(), request.contrasenia()));
         UserDetails user = userRepository.findByEmail(request.email()).orElseThrow();
+        Object[] userProfile = userRepository.findUserProfileByEmail(request.email()).get(0);
         String token = jwtService.getToken(user);
 
         return AuthResponse.builder()
                 .token(token)
+                .nombre(String.valueOf(userProfile[0]))
+                .apellido(String.valueOf(userProfile[1]))
+                .role((Role) userProfile[2])
                 .build();
     }
 
@@ -54,6 +58,9 @@ public class AuthService {
 
         return AuthResponse.builder()
                 .token(jwtService.getToken(user))
+                .nombre(user.getNombre())
+                .apellido(user.getApellido())
+                .role(user.getRole())
                 .build();
     }
 }

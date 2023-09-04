@@ -1,4 +1,4 @@
-package com.api.aerolinea.Entities.User;
+package com.api.aerolinea.Entities;
 
 public enum Role {
     ADMIN,

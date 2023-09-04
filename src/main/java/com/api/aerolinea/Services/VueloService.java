@@ -25,18 +25,24 @@ public class VueloService {
 
         for (Object[] result : results) {
             VueloDTO vuelo = new VueloDTO(
-                    (String) result[0],
+                    (UUID) result[0],
                     (String) result[1],
                     (String) result[2],
-                    (Date) result[3],
+                    (String) result[3],
                     (Date) result[4],
-                    (Float) result[5]
+                    (Date) result[5],
+                    (Float) result[6]
             );
 
             vuelos.add(vuelo);
         }
 
         return vuelos;
+    }
+
+    public Object getVuelo(UUID uuid) {
+
+        return vueloRepository.findVueloPorId(uuid).get(0);
     }
 
 

@@ -1,7 +1,7 @@
 package com.api.aerolinea.Controllers;
 
 import com.api.aerolinea.DTOs.VueloDTO;
-import com.api.aerolinea.Entities.Vuelo;
+import com.api.aerolinea.DTOs.VueloRegistroDTO;
 import com.api.aerolinea.Services.VueloService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -43,13 +43,22 @@ public class VueloController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<String> postVuelo() {
+    public ResponseEntity<String> postVuelo(@RequestBody VueloRegistroDTO vuelo) {
 
+        return vueloService.postVuelo(vuelo);
+    }
 
+    // TODO
+    @PatchMapping("/{id}")
+    @Transactional
+    public ResponseEntity<String> patchVuelo(@PathVariable String id) {
         return ResponseEntity.noContent().build();
     }
 
-    public ResponseEntity<String> patchVuelo() {
+    // TODO
+    @DeleteMapping("/{id}")
+    @Transactional
+    public ResponseEntity<String> deleteVuelo(@PathVariable String id) {
         return ResponseEntity.noContent().build();
     }
 

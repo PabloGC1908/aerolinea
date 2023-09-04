@@ -62,9 +62,8 @@ public class VueloService {
         return vuelos;
     }
 
-    public ResponseEntity<Object> getVuelo(String id) {
+    public ResponseEntity<Object> getVuelo(UUID uuid) {
         try {
-            UUID uuid = UUID.fromString(id);
             Object vuelo = vueloRepository.findVueloConDetallesPorId(uuid).get(0);
             return ResponseEntity.ok(vuelo);
         } catch (IllegalArgumentException e) {
@@ -115,8 +114,7 @@ public class VueloService {
         return aerolineaRepository.findById(id).orElseThrow(ChangeSetPersister.NotFoundException::new);
     }
 
-    public ResponseEntity<String> patchVuelo(VueloRegistroDTO vueloRegistro, String id) {
-        UUID uuid = UUID.fromString(id);
+    public ResponseEntity<String> patchVuelo(VueloRegistroDTO vueloRegistro, UUID uuid) {
         Optional<Vuelo> vuelo = vueloRepository.findById(uuid);
 
         if (vuelo.isPresent()) {
@@ -141,14 +139,9 @@ public class VueloService {
             return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).body("Vuelo no encontrado");
     }
 
-    public ResponseEntity<String> deleteVuelo(String id) {
-        try {
-            UUID uuid = UUID.fromString(id);
-            vueloRepository.deleteById(uuid);
-            return ResponseEntity.ok("Vuelo eliminado exitosamente");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body("Id no valido");
-        }
+    public ResponseEntity<String> deleteVuelo(UUID uuid) {
+        vueloRepository.deleteById(uuid);
+        return ResponseEntity.ok("Vuelo eliminado exitosamente");
     }
 
 }

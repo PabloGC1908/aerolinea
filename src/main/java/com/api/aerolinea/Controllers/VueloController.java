@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/vuelos")
@@ -25,7 +26,7 @@ public class VueloController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getVuelo(@Valid @PathVariable String id) {
+    public ResponseEntity<Object> getVuelo(@Valid @PathVariable UUID id) {
         return vueloService.getVuelo(id);
     }
 
@@ -38,13 +39,12 @@ public class VueloController {
 
     @PatchMapping("/{id}")
     @Transactional
-    public ResponseEntity<String> patchVuelo(@Valid @RequestBody VueloRegistroDTO vuelo, @PathVariable String id) {
+    public ResponseEntity<String> patchVuelo(@Valid @RequestBody VueloRegistroDTO vuelo, @PathVariable UUID id) {
         return vueloService.patchVuelo(vuelo, id);
     }
 
     @DeleteMapping("/{id}")
-    @Transactional
-    public ResponseEntity<String> deleteVuelo(@Valid @PathVariable String id) {
+    public ResponseEntity<String> deleteVuelo(@Valid @PathVariable UUID id) {
         return vueloService.deleteVuelo(id);
     }
 

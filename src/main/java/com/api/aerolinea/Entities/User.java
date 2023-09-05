@@ -32,6 +32,8 @@ public class User implements UserDetails {
     private String contrasenia;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @OneToMany(mappedBy = "usuario")
+    private List<TarjetaCredito> tarjetaCreditos;
 
 
     @Override

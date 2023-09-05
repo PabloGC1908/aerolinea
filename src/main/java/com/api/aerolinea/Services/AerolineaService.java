@@ -1,7 +1,6 @@
 package com.api.aerolinea.Services;
 
 import com.api.aerolinea.DTOs.AerolineaDTO;
-import com.api.aerolinea.Entities.Aerolinea;
 import com.api.aerolinea.Repositories.AerolineaRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

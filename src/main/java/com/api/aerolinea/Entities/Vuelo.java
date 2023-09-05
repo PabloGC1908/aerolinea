@@ -32,7 +32,7 @@ public class Vuelo {
     @JoinColumn(name = "ciudad_destino_id")
     private Ciudad ciudadDestino;
     private Float precio;
-    @Column(name = "canitdad_pasajes")
+    @Column(name = "cantidad_pasajes")
     private Integer cantidadPasajes;
     @Column(name = "fecha_ida")
     private Date fechaIda;

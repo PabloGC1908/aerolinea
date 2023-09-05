@@ -34,6 +34,8 @@ public class User implements UserDetails {
     private Role role;
     @OneToMany(mappedBy = "usuario")
     private List<TarjetaCredito> tarjetaCreditos;
+    @OneToMany(mappedBy = "usuario")
+    private List<Boleto> boletos;
 
 
     @Override

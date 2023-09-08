@@ -13,10 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class BoletoService {
@@ -94,5 +91,16 @@ public class BoletoService {
 
     private Vuelo buscarVuelo(UUID id) throws ChangeSetPersister.NotFoundException {
         return vueloRepository.findById(id).orElseThrow(ChangeSetPersister.NotFoundException::new);
+    }
+
+    public ResponseEntity<String> deleteBoleto(UUID id) {
+        Optional<Boleto> boleto = boletoRepository.findById(id);
+
+        if (boleto.isPresent()) {
+            boletoRepository.deleteById(id);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Boleto eliminado");
+        } else {
+            return ResponseEntity.badRequest().body("Boleto no encontrado");
+        }
     }
 }

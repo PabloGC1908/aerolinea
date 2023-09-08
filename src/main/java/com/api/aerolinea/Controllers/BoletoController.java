@@ -32,4 +32,9 @@ public class BoletoController {
     public ResponseEntity<String> postBoleto(@RequestBody BoletoRegistroDTO boleto) {
         return boletoService.postBoleto(boleto);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteBoleto(@PathVariable UUID id) {
+        return boletoService.deleteBoleto(id);
+    }
 }

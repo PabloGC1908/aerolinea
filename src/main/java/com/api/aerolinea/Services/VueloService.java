@@ -79,7 +79,7 @@ public class VueloService {
             );
 
 
-            return ResponseEntity.ok(vuelo);
+            return ResponseEntity.status(HttpStatus.FOUND).body(vuelo);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body("Id no valido");
         }

@@ -1,7 +1,10 @@
 package com.api.aerolinea.Services;
 
 import com.api.aerolinea.Repositories.TarjetaCreditoRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 public class TarjetaCreditoService {
@@ -11,5 +14,7 @@ public class TarjetaCreditoService {
         this.tarjetaCreditoRepository = tarjetaCreditoRepository;
     }
 
-    // TODO
+    public ResponseEntity<String> getTarjetaPorUsuario(UUID id) {
+        return ResponseEntity.noContent().build();
+    }
 }

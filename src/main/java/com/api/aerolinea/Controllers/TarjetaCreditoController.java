@@ -1,12 +1,10 @@
 package com.api.aerolinea.Controllers;
 
+import com.api.aerolinea.DTOs.TarjetaRegistroDTO;
 import com.api.aerolinea.Services.TarjetaCreditoService;
-import org.apache.coyote.Response;
+import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -21,6 +19,12 @@ public class TarjetaCreditoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<String> getTarjetaPorUsuario(@PathVariable UUID id){
-        return tarjetaCreditoService.getTarjetaPorUsuario(id);
+        return tarjetaCreditoService.getNombreTarjetaPorUsuarioId(id);
+    }
+
+    @PostMapping
+    @Transactional
+    public ResponseEntity<String> postTarjetaDeUsuario(@RequestBody TarjetaRegistroDTO tarjeta) {
+        return tarjetaCreditoService.postTarjetaDeUsuario(tarjeta);
     }
 }

@@ -23,6 +23,7 @@ public class TarjetaCredito {
     private User usuario;
     private String nombreTarjeta;
     private String numeroTarjeta;
-    private Date fechaExpiracion;
+    private Integer mesExpiracion;
+    private Integer anioExpiracion;
     private Integer cvv;
 }

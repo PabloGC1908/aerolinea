@@ -3,6 +3,7 @@ package com.api.aerolinea.Controllers;
 import com.api.aerolinea.DTOs.BoletoDTO;
 import com.api.aerolinea.DTOs.BoletoRegistroDTO;
 import com.api.aerolinea.Services.BoletoService;
+import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +30,7 @@ public class BoletoController {
     }
 
     @PostMapping
+    @Transactional
     public ResponseEntity<String> postBoleto(@RequestBody BoletoRegistroDTO boleto) {
         return boletoService.postBoleto(boleto);
     }

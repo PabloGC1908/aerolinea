@@ -9,6 +9,7 @@ import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -32,13 +33,15 @@ public class TarjetaCreditoService {
 
     public ResponseEntity<String> postTarjetaDeUsuario(TarjetaRegistroDTO tarjetaRegistro) {
         try {
+            int[] fechaPartida = separarFecha(tarjetaRegistro.fechaExpiracion());
+
             TarjetaCredito tarjeta = TarjetaCredito.builder()
                     .id(UUID.randomUUID())
                     .nombreTarjeta(tarjetaRegistro.nombreTarjeta())
                     .numeroTarjeta(tarjetaRegistro.numeroTarjeta())
                     .usuario(buscarUsuario(tarjetaRegistro.idUsuario()))
-                    .mesExpiracion(tarjetaRegistro.mesExpiracion())
-                    .anioExpiracion(tarjetaRegistro.anioExpiracion())
+                    .mesExpiracion(fechaPartida[0])
+                    .anioExpiracion(fechaPartida[1])
                     .cvv(tarjetaRegistro.cvv())
                     .build();
 
@@ -54,4 +57,16 @@ public class TarjetaCreditoService {
     private User buscarUsuario(UUID id) throws ChangeSetPersister.NotFoundException {
         return userRepository.findById(id).orElseThrow(ChangeSetPersister.NotFoundException::new);
     }
+
+    private int[] separarFecha(String fecha) {
+        String[] partes = fecha.split("-");
+        int[] result = new int[partes.length];
+
+        for (int i = 0; i < partes.length; i++) {
+            result[i] = Integer.parseInt(partes[i]);
+        }
+
+        return result;
+    }
+
 }

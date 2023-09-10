@@ -73,6 +73,7 @@ public class BoletoService {
         try {
             Boleto boleto = Boleto.builder()
                     .id(UUID.randomUUID())
+                    .fechaCompra(new Date())
                     .usuario(buscarUsuario(boletoRegistro.usuarioId()))
                     .vuelo(buscarVuelo(boletoRegistro.vueloId()))
                     .build();

@@ -39,6 +39,7 @@ public class AuthService {
                 .nombre(String.valueOf(userProfile[0]))
                 .apellido(String.valueOf(userProfile[1]))
                 .role((Role) userProfile[2])
+                .uuid((UUID) userProfile[3])
                 .build();
     }
 

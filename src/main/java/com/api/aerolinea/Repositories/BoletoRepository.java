@@ -19,7 +19,7 @@ public interface BoletoRepository extends JpaRepository<Boleto, UUID> {
             " boleto.fechaCompra," +
             " boleto.vuelo.precio" +
             " FROM Boleto boleto" +
-            " INNER JOIN Vuelo vuelo ON vuelo.uuid = boleto.id" +
+            " INNER JOIN Vuelo vuelo ON vuelo.uuid = boleto.vuelo.uuid" +
             " WHERE boleto.usuario.uuid = :id")
     List<Object[]> findBoletoByUsuarioId(@Param("id") UUID id);
 
@@ -30,6 +30,6 @@ public interface BoletoRepository extends JpaRepository<Boleto, UUID> {
             " boleto.fechaCompra," +
             " boleto.vuelo.precio" +
             " FROM Boleto boleto" +
-            " INNER JOIN Vuelo vuelo ON vuelo.uuid = boleto.id")
+            " INNER JOIN Vuelo vuelo ON vuelo.uuid = boleto.vuelo.uuid")
     List<Object[]> findAllBoletos();
 }

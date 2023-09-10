@@ -30,11 +30,11 @@ public class BoletoService {
     }
 
 
-    // TODO
-
     public ResponseEntity<List<BoletoDTO>> getBoletoUsuario(UUID id) {
         try {
             List<Object[]> resultSet = boletoRepository.findBoletoByUsuarioId(id);
+            System.out.println("Boletos");
+            System.out.println(resultSet);
             return getListaBoletos(resultSet);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(null);
@@ -66,7 +66,7 @@ public class BoletoService {
             boletos.add(boleto);
         }
 
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(boletos);
+        return ResponseEntity.ok(boletos);
     }
 
     public ResponseEntity<String> postBoleto(BoletoRegistroDTO boletoRegistro) {

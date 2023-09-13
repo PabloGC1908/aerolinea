@@ -33,7 +33,7 @@ public class VueloController {
     @PostMapping
     @Transactional
     public ResponseEntity<String> postVuelo(@Valid @RequestBody VueloRegistroDTO vuelo) {
-
+        System.out.println(vuelo);
         return vueloService.postVuelo(vuelo);
     }
 

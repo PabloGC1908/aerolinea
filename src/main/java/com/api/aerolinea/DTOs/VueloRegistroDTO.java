@@ -12,7 +12,7 @@ public record VueloRegistroDTO(
         Integer ciudadDestinoId,
         @NotNull
         Integer ciudadOrigenId,
-        @NotBlank
+        @NotNull
         Float precio,
         @NotNull
         String fechaIda,

@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
 
-import java.util.Date;
 import java.util.UUID;
 
 @Data
@@ -15,7 +14,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "tarjeta_credito")
+@Table(name = "tarjeta_credito", indexes = @Index(columnList = "numeroTarjeta"))
 public class TarjetaCredito {
     @Id
     @UuidGenerator

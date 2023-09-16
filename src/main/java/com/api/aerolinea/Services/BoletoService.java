@@ -33,8 +33,7 @@ public class BoletoService {
     public ResponseEntity<List<BoletoDTO>> getBoletoUsuario(UUID id) {
         try {
             List<Object[]> resultSet = boletoRepository.findBoletoByUsuarioId(id);
-            System.out.println("Boletos");
-            System.out.println(resultSet);
+
             return getListaBoletos(resultSet);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(null);

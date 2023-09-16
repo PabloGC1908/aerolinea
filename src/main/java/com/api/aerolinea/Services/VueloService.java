@@ -155,7 +155,7 @@ public class VueloService {
 
     public ResponseEntity<String> deleteVuelo(UUID uuid) {
         vueloRepository.deleteById(uuid);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Vuelo eliminado exitosamente");
+        return ResponseEntity.ok("Vuelo eliminado exitosamente");
     }
 
 }

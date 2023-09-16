@@ -1,7 +1,5 @@
 package com.api.aerolinea.Entities;
 
-import com.api.aerolinea.Entities.Aerolinea;
-import com.api.aerolinea.Entities.Ciudad;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -38,4 +37,6 @@ public class Vuelo {
     private Date fechaIda;
     @Column(name = "fecha_vuelta")
     private Date fechaVuelta;
+    @OneToMany(mappedBy = "vuelo", cascade = CascadeType.ALL)
+    private List<Boleto> boletos;
 }

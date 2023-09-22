@@ -7,10 +7,13 @@ import jakarta.validation.constraints.Pattern;
 
 public record UserDTO(
         @NotBlank
+        @NotNull
         String nombre,
         @NotBlank
+        @NotNull
         String apellido,
         @Email
+        @NotNull
         String email,
         @NotBlank
         @Pattern(regexp = "\\d{9}")

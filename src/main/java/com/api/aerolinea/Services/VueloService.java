@@ -32,6 +32,22 @@ public class VueloService {
         this.ciudadRepository = ciudadRepository;
     }
 
+    public ResponseEntity<VueloRegistroDTO> getVueloConIds(UUID id) {
+        Object[] vuelo = vueloRepository.findVueloIdsById(id).get(0);
+
+        VueloRegistroDTO vueloRegistroDTO = new VueloRegistroDTO(
+                (Integer) vuelo[0],
+                (Integer) vuelo[1],
+                (Integer) vuelo[2],
+                (Integer) vuelo[3],
+                (Float) vuelo[4],
+                fechaToString((Date) vuelo[5]),
+                fechaToString((Date) vuelo[6])
+        );
+
+        return ResponseEntity.ok(vueloRegistroDTO);
+    }
+
     public ResponseEntity<List<VueloDTO>> getVuelos() {
         List<VueloDTO> vuelos = listarVuelos();
 
@@ -108,6 +124,12 @@ public class VueloService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error al crear el vuelo: " + e.getMessage());
         }
+    }
+
+    public String fechaToString(Date fecha) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+
+        return simpleDateFormat.format(fecha);
     }
 
     private Date parseFecha(String fecha) {

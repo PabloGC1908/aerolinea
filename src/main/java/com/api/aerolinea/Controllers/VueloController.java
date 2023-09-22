@@ -20,6 +20,11 @@ public class VueloController {
         this.vueloService = vueloService;
     }
 
+    @GetMapping("/ids/{id}")
+    public ResponseEntity<VueloRegistroDTO> getVueloConIds(@Valid @PathVariable UUID id) {
+        return vueloService.getVueloConIds(id);
+    }
+
     @GetMapping
     public ResponseEntity<List<VueloDTO>> getVuelos() {
         return vueloService.getVuelos();
@@ -33,13 +38,13 @@ public class VueloController {
     @PostMapping
     @Transactional
     public ResponseEntity<String> postVuelo(@Valid @RequestBody VueloRegistroDTO vuelo) {
-        System.out.println(vuelo);
         return vueloService.postVuelo(vuelo);
     }
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity<String> patchVuelo(@Valid @RequestBody VueloRegistroDTO vuelo, @PathVariable UUID id) {
+    public ResponseEntity<String> putVuelo(@Valid @RequestBody VueloRegistroDTO vuelo, @PathVariable UUID id) {
+        System.out.println(vuelo);
         return vueloService.patchVuelo(vuelo, id);
     }
 

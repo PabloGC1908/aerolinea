@@ -1,6 +1,5 @@
 package com.api.aerolinea.DTOs;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record VueloRegistroDTO(

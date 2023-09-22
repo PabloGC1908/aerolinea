@@ -9,7 +9,6 @@ import com.api.aerolinea.Repositories.BoletoRepository;
 import com.api.aerolinea.Repositories.UserRepository;
 import com.api.aerolinea.Repositories.VueloRepository;
 import org.springframework.data.crossstore.ChangeSetPersister;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -98,7 +97,7 @@ public class BoletoService {
 
         if (boleto.isPresent()) {
             boletoRepository.deleteById(id);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Boleto eliminado");
+            return ResponseEntity.ok("Usuario eliminado correctamente");
         } else {
             return ResponseEntity.badRequest().body("Boleto no encontrado");
         }

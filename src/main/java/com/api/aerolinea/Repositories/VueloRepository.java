@@ -39,4 +39,15 @@ public interface VueloRepository extends JpaRepository<Vuelo, UUID> {
             " INNER JOIN Ciudad c_d ON vuelo.ciudadDestino.id = c_d.id" +
             " WHERE vuelo.uuid = :id")
     List<Object[]> findVueloConDetallesPorId(@Param("id") UUID id);
+
+    @Query("SELECT vuelo.aerolinea.id, " +
+            "vuelo.cantidadPasajes, " +
+            "vuelo.ciudadOrigen.id, " +
+            "vuelo.ciudadDestino.id, " +
+            "vuelo.precio, " +
+            "vuelo.fechaIda, " +
+            "vuelo.fechaVuelta " +
+            "FROM Vuelo vuelo " +
+            "WHERE vuelo.uuid = :id")
+    List<Object[]> findVueloIdsById(@Param("id") UUID id);
 }

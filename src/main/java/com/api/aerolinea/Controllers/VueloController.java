@@ -25,40 +25,39 @@ public class VueloController {
 
     @GetMapping("/ids/{id}")
     public ResponseEntity<VueloRegistroDTO> getVueloConIds(@Valid @PathVariable UUID id) {
-        logger.info("GET a vuelo con id: {}", id);
+        logger.info("Enviando ids de vuelo con id: {}", id);
         return vueloService.getVueloConIds(id);
     }
 
     @GetMapping
     public ResponseEntity<List<VueloDTO>> getVuelos() {
-        logger.info("GET a vuelos");
+        logger.info("Enviando lista de vuelos");
         return vueloService.getVuelos();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getVuelo(@Valid @PathVariable UUID id) {
+        logger.info("Enviando vuelos con id: {}", id);
         return vueloService.getVuelo(id);
     }
 
     @PostMapping
     @Transactional
     public ResponseEntity<String> postVuelo(@Valid @RequestBody VueloRegistroDTO vuelo) {
-        logger.info("Se esta ingresando vuelo: {}", vuelo);
+        logger.info("Recibiendo vuelo: {}", vuelo);
         return vueloService.postVuelo(vuelo);
     }
 
     @PutMapping("/{id}")
     @Transactional
     public ResponseEntity<String> putVuelo(@Valid @RequestBody VueloRegistroDTO vuelo, @PathVariable UUID id) {
-        logger.info("Se esta actualizando vuelo con id: {}", id);
+        logger.info("Actualizando vuelo con id: {}", id);
         return vueloService.patchVuelo(vuelo, id);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteVuelo(@Valid @PathVariable UUID id) {
-        logger.warn("Se ha eliminado el vuelo con id: {}", id);
+        logger.warn("Eliminado el vuelo con id: {}", id);
         return vueloService.deleteVuelo(id);
     }
-
-
 }

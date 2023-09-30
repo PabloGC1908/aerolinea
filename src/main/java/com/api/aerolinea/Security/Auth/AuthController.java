@@ -18,7 +18,7 @@ public class AuthController {
 
     @PostMapping("/log-in")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
-        log.info("Solicitud para inicio de sesion: {}", request.email());
+        log.info("Inicio de sesion: {}", request.email());
         return ResponseEntity.ok().body(authService.login(request));
     }
 

@@ -17,6 +17,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+/**
+ * Servicio para gestionar operaciones relacionadas con vuelos.
+ */
 @Service
 public class VueloService {
     private final VueloRepository vueloRepository;
@@ -24,6 +27,13 @@ public class VueloService {
     private final CiudadRepository ciudadRepository;
 
 
+    /**
+     * Constructor de VueloService.
+     *
+     * @param vueloRepository    Repositorio de vuelos utilizado para acceder a los datos de los vuelos.
+     * @param aerolineaRepository Repositorio de aerolíneas utilizado para acceder a los datos de las aerolíneas.
+     * @param ciudadRepository    Repositorio de ciudades utilizado para acceder a los datos de las ciudades.
+     */
     public VueloService(VueloRepository vueloRepository,
                         AerolineaRepository aerolineaRepository,
                         CiudadRepository ciudadRepository) {
@@ -126,12 +136,24 @@ public class VueloService {
         }
     }
 
+    /**
+     * Convierte una fecha en formato Date a una cadena de texto en el formato "yyyy-MM-dd'T'HH:mm".
+     *
+     * @param fecha Fecha en formato Date.
+     * @return Cadena de texto con la fecha formateada.
+     */
     public String fechaToString(Date fecha) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-
         return simpleDateFormat.format(fecha);
     }
 
+    /**
+     * Convierte una cadena de texto en formato "yyyy-MM-dd'T'HH:mm:ss.SSSXXX" a un objeto Date.
+     *
+     * @param fecha Cadena de texto con la fecha en formato especificado.
+     * @return Objeto Date representando la fecha.
+     * @throws RuntimeException Si se produce un error durante la conversión.
+     */
     private Date parseFecha(String fecha) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
 
@@ -142,10 +164,24 @@ public class VueloService {
         }
     }
 
+    /**
+     * Busca una ciudad por su ID en el repositorio de ciudades.
+     *
+     * @param id ID de la ciudad a buscar.
+     * @return Objeto Ciudad si se encuentra, o lanza una excepción si no se encuentra.
+     * @throws ChangeSetPersister.NotFoundException Si la ciudad no se encuentra en el repositorio.
+     */
     private Ciudad buscarCiudad(Integer id) throws ChangeSetPersister.NotFoundException {
         return ciudadRepository.findById(id).orElseThrow(ChangeSetPersister.NotFoundException::new);
     }
 
+    /**
+     * Busca una aerolínea por su ID en el repositorio de aerolíneas.
+     *
+     * @param id ID de la aerolínea a buscar.
+     * @return Objeto Aerolinea si se encuentra, o lanza una excepción si no se encuentra.
+     * @throws ChangeSetPersister.NotFoundException Si la aerolínea no se encuentra en el repositorio.
+     */
     private Aerolinea buscarAerolinea(Integer id) throws ChangeSetPersister.NotFoundException {
         return aerolineaRepository.findById(id).orElseThrow(ChangeSetPersister.NotFoundException::new);
     }

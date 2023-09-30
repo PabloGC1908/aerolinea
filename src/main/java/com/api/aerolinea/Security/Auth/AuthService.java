@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+/**
+ * Clase de servicio para autenticación y registro de usuarios.
+ */
 @Service
 public class AuthService {
     private final UserRepository userRepository;
@@ -19,6 +22,14 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
+    /**
+     * Constructor de AuthService que recibe las dependencias necesarias.
+     *
+     * @param userRepository          Repositorio de usuarios.
+     * @param jwtService              Servicio JWT.
+     * @param passwordEncoder         Codificador de contraseñas.
+     * @param authenticationManager   Administrador de autenticación.
+     */
     public AuthService(UserRepository userRepository, JwtService jwtService, PasswordEncoder passwordEncoder,
                        AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
@@ -27,13 +38,26 @@ public class AuthService {
         this.authenticationManager = authenticationManager;
     }
 
-
+    /**
+     * Realiza el proceso de inicio de sesión de un usuario.
+     *
+     * @param request Solicitud de inicio de sesión.
+     * @return Respuesta de autenticación que incluye un token JWT y los detalles del usuario.
+     */
     public AuthResponse login(LoginRequest request) {
+        // Autenticar al usuario
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.email(), request.contrasenia()));
+
+        // Obtener detalles del usuario basados en el correo electrónico
         UserDetails user = userRepository.findByEmail(request.email()).orElseThrow();
+
+        // Obtener el perfil del usuario y almacenarlo en un array
         Object[] userProfile = userRepository.findUserProfileByEmail(request.email()).get(0);
+
+        // Generar un token JWT para el usuario autenticado
         String token = jwtService.getToken(user);
 
+        // Construir y devolver la respuesta de autenticación
         return AuthResponse.builder()
                 .token(token)
                 .nombre(String.valueOf(userProfile[0]))
@@ -43,7 +67,14 @@ public class AuthService {
                 .build();
     }
 
+    /**
+     * Realiza el proceso de registro de un nuevo usuario.
+     *
+     * @param request Solicitud de registro.
+     * @return Respuesta de autenticación que incluye un token JWT y los detalles del usuario registrado.
+     */
     public AuthResponse register(RegisterRequest request) {
+        // Crear una instancia de User con los datos proporcionados
         User user = User.builder()
                 .uuid(UUID.randomUUID())
                 .nombre(request.nombre())
@@ -54,11 +85,15 @@ public class AuthService {
                 .role(Role.USER)
                 .build();
 
-
+        // Guardar el nuevo usuario en la base de datos
         userRepository.save(user);
 
+        // Generar un token JWT para el usuario registrado
+        String token = jwtService.getToken(user);
+
+        // Construir y devolver la respuesta de autenticación
         return AuthResponse.builder()
-                .token(jwtService.getToken(user))
+                .token(token)
                 .nombre(user.getNombre())
                 .apellido(user.getApellido())
                 .role(user.getRole())

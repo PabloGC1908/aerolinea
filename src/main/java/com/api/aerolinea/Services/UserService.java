@@ -3,7 +3,7 @@ package com.api.aerolinea.Services;
 import com.api.aerolinea.DTOs.UserDTO;
 import com.api.aerolinea.Entities.Role;
 import com.api.aerolinea.Entities.User;
-import com.api.aerolinea.Exceptions.UserNotFoundException;
+import com.api.aerolinea.Exceptions.Classes.UserNotFoundException;
 import com.api.aerolinea.Repositories.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

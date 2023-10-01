@@ -2,8 +2,8 @@ package com.api.aerolinea.Security.Auth;
 
 import com.api.aerolinea.Entities.Role;
 import com.api.aerolinea.Entities.User;
-import com.api.aerolinea.Exceptions.UserAlreadyExistsException;
-import com.api.aerolinea.Exceptions.UserNotFoundException;
+import com.api.aerolinea.Exceptions.Classes.UserAlreadyExistsException;
+import com.api.aerolinea.Exceptions.Classes.UserNotFoundException;
 import com.api.aerolinea.Repositories.UserRepository;
 import com.api.aerolinea.Security.Jwt.JwtService;
 import org.slf4j.Logger;

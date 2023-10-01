@@ -5,9 +5,9 @@ import com.api.aerolinea.DTOs.VueloRegistroDTO;
 import com.api.aerolinea.Entities.Aerolinea;
 import com.api.aerolinea.Entities.Ciudad;
 import com.api.aerolinea.Entities.Vuelo;
-import com.api.aerolinea.Exceptions.AerolineaNotFoundException;
-import com.api.aerolinea.Exceptions.CiudadNotFoundException;
-import com.api.aerolinea.Exceptions.VueloNotFoundException;
+import com.api.aerolinea.Exceptions.Classes.AerolineaNotFoundException;
+import com.api.aerolinea.Exceptions.Classes.CiudadNotFoundException;
+import com.api.aerolinea.Exceptions.Classes.VueloNotFoundException;
 import com.api.aerolinea.Repositories.AerolineaRepository;
 import com.api.aerolinea.Repositories.CiudadRepository;
 import com.api.aerolinea.Repositories.VueloRepository;
@@ -226,5 +226,4 @@ public class VueloService {
         vueloRepository.deleteById(uuid);
         return ResponseEntity.status(HttpStatus.OK).body("Vuelo eliminado exitosamente");
     }
-
 }

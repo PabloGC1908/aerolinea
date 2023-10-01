@@ -1,5 +1,9 @@
-package com.api.aerolinea.Exceptions;
+package com.api.aerolinea.Exceptions.Handlers;
 
+import com.api.aerolinea.Exceptions.Classes.AerolineaNotFoundException;
+import com.api.aerolinea.Exceptions.Classes.CiudadNotFoundException;
+import com.api.aerolinea.Exceptions.Classes.UserAlreadyExistsException;
+import com.api.aerolinea.Exceptions.Classes.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

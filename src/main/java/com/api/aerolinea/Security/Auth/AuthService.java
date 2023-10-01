@@ -2,6 +2,8 @@ package com.api.aerolinea.Security.Auth;
 
 import com.api.aerolinea.Entities.Role;
 import com.api.aerolinea.Entities.User;
+import com.api.aerolinea.Exceptions.UserAlreadyExistsException;
+import com.api.aerolinea.Exceptions.UserNotFoundException;
 import com.api.aerolinea.Repositories.UserRepository;
 import com.api.aerolinea.Security.Jwt.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -46,10 +49,16 @@ public class AuthService {
      */
     public AuthResponse login(LoginRequest request) {
         // Autenticar al usuario
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.email(), request.contrasenia()));
+        var authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.email(), request.contrasenia()));
+
+        if (!authentication.isAuthenticated()) {
+            throw new UserNotFoundException("No se encontro al usuario");
+        }
 
         // Obtener detalles del usuario basados en el correo electrónico
-        UserDetails user = userRepository.findByEmail(request.email()).orElseThrow();
+        UserDetails user = userRepository.findByEmail(request.email()).orElseThrow(
+                () -> new UserNotFoundException("No se encontro al usuario"));
 
         // Obtener el perfil del usuario y almacenarlo en un array
         Object[] userProfile = userRepository.findUserProfileByEmail(request.email()).get(0);
@@ -67,13 +76,24 @@ public class AuthService {
                 .build();
     }
 
+    public AuthResponse register(RegisterRequest request) {
+        Optional<User> userOptional = userRepository.findByEmail(request.email());
+
+        if (userOptional.isPresent()) {
+            throw new UserAlreadyExistsException("El usuario ya se encuentra registrado.");
+        }
+
+        return registerUser(request);
+    }
+
+
     /**
      * Realiza el proceso de registro de un nuevo usuario.
      *
      * @param request Solicitud de registro.
      * @return Respuesta de autenticación que incluye un token JWT y los detalles del usuario registrado.
      */
-    public AuthResponse register(RegisterRequest request) {
+    private AuthResponse registerUser(RegisterRequest request) {
         // Crear una instancia de User con los datos proporcionados
         User user = User.builder()
                 .uuid(UUID.randomUUID())

@@ -6,6 +6,8 @@ import com.api.aerolinea.Exceptions.UserAlreadyExistsException;
 import com.api.aerolinea.Exceptions.UserNotFoundException;
 import com.api.aerolinea.Repositories.UserRepository;
 import com.api.aerolinea.Security.Jwt.JwtService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,6 +26,7 @@ public class AuthService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
 
     /**
      * Constructor de AuthService que recibe las dependencias necesarias.
@@ -48,17 +51,19 @@ public class AuthService {
      * @return Respuesta de autenticación que incluye un token JWT y los detalles del usuario.
      */
     public AuthResponse login(LoginRequest request) {
+        logger.info("Intentando inicio de sesion a: {}", request.email());
         // Autenticar al usuario
         var authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.email(), request.contrasenia()));
 
-        if (!authentication.isAuthenticated()) {
+        if (!authentication.isAuthenticated())
             throw new UserNotFoundException("No se encontro al usuario");
-        }
 
         // Obtener detalles del usuario basados en el correo electrónico
         UserDetails user = userRepository.findByEmail(request.email()).orElseThrow(
                 () -> new UserNotFoundException("No se encontro al usuario"));
+
+        logger.info("Se logro encontrar al usuario: {}", request.email());
 
         // Obtener el perfil del usuario y almacenarlo en un array
         Object[] userProfile = userRepository.findUserProfileByEmail(request.email()).get(0);

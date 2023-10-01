@@ -6,16 +6,16 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 public record RegisterRequest(
-            @NotBlank
+            @NotBlank(message = "Debe colocar sus nombres")
             String nombre,
-            @NotBlank
+            @NotBlank(message = "Debe colocar sus apellidos")
             String apellido,
-            @Email
+            @Email(message = "Debe ingresar correctamente su email")
             String email,
             @NotNull
-            @Pattern(regexp = "\\d{9}")
+            @Pattern(regexp = "\\d{9}", message = "Ingrese correctamente su numero de telefono")
             String numero,
-            @NotBlank
+            @NotBlank(message = "Debe colocar una contraseña")
             String contrasenia
 ) {
 }

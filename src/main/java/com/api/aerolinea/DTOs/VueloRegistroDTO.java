@@ -1,5 +1,6 @@
 package com.api.aerolinea.DTOs;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 public record VueloRegistroDTO(
@@ -11,11 +12,12 @@ public record VueloRegistroDTO(
         Integer ciudadDestinoId,
         @NotNull
         Integer ciudadOrigenId,
-        @NotNull
+        @NotNull(message = "El precio no debe ser nulo")
+        @Min(message = "El precio no puede ser negativo", value = 0L)
         Float precio,
-        @NotNull
+        @NotNull(message = "La fecha de ida no puede ser nula")
         String fechaIda,
-        @NotNull
+        @NotNull(message = "La fecha de vuelta no puede ser nula")
         String fechaVuelta
 ) {
 }

@@ -3,6 +3,7 @@ package com.api.aerolinea.Services;
 import com.api.aerolinea.DTOs.UserDTO;
 import com.api.aerolinea.Entities.Role;
 import com.api.aerolinea.Entities.User;
+import com.api.aerolinea.Exceptions.UserNotFoundException;
 import com.api.aerolinea.Repositories.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,10 +53,11 @@ public class UserService {
     public ResponseEntity<User> getUsuario(UUID id) {
         Optional<User> user = userRepository.findById(id);
 
-        return user.map(value ->
-                        ResponseEntity.status(HttpStatus.FOUND).body(value)).
-                orElseGet(() ->
-                        ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        if (user.isEmpty()) {
+            throw new UserNotFoundException("Usuario no encontrado");
+        }
+
+        return ResponseEntity.status(HttpStatus.FOUND).body(user.get());
     }
 
     /**
@@ -78,9 +80,8 @@ public class UserService {
 
             userRepository.save(user);
             return ResponseEntity.status(HttpStatus.CREATED).body("Usuario creado correctamente");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error al crear el usuario: " + e.getMessage());
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -94,19 +95,20 @@ public class UserService {
     public ResponseEntity<String> patchUsuario(UserDTO userDTO, UUID uuid) {
         Optional<User> user = userRepository.findById(uuid);
 
-        if (user.isPresent()) {
-            User userModificado = user.get();
-            userModificado.setNombre(userDTO.nombre());
-            userModificado.setApellido(userDTO.apellido());
-            userModificado.setEmail(userDTO.email());
-            userModificado.setContrasenia(userDTO.contrasenia());
-
-            userRepository.save(userModificado);
-
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Usuario modificado exitosamente");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
+        if (user.isEmpty()) {
+            throw new UserNotFoundException("Usuario no encontrado");
         }
+
+
+        User userModificado = user.get();
+        userModificado.setNombre(userDTO.nombre());
+        userModificado.setApellido(userDTO.apellido());
+        userModificado.setEmail(userDTO.email());
+        userModificado.setContrasenia(userDTO.contrasenia());
+
+        userRepository.save(userModificado);
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Usuario modificado exitosamente");
     }
 
     /**
@@ -114,7 +116,9 @@ public class UserService {
      *
      * @param id ID del usuario a eliminar.
      */
-    public void deleteUsuario(UUID id) {
+    public ResponseEntity<String> deleteUsuario(UUID id) {
         userRepository.deleteById(id);
+
+        return ResponseEntity.status(HttpStatus.OK).body("Usuario eliminado correctamente");
     }
 }

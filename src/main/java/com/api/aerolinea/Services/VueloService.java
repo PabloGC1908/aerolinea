@@ -5,10 +5,12 @@ import com.api.aerolinea.DTOs.VueloRegistroDTO;
 import com.api.aerolinea.Entities.Aerolinea;
 import com.api.aerolinea.Entities.Ciudad;
 import com.api.aerolinea.Entities.Vuelo;
+import com.api.aerolinea.Exceptions.AerolineaNotFoundException;
+import com.api.aerolinea.Exceptions.CiudadNotFoundException;
+import com.api.aerolinea.Exceptions.VueloNotFoundException;
 import com.api.aerolinea.Repositories.AerolineaRepository;
 import com.api.aerolinea.Repositories.CiudadRepository;
 import com.api.aerolinea.Repositories.VueloRepository;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -45,6 +47,10 @@ public class VueloService {
     public ResponseEntity<VueloRegistroDTO> getVueloConIds(UUID id) {
         Object[] vuelo = vueloRepository.findVueloIdsById(id).get(0);
 
+        if (vuelo == null) {
+            throw new VueloNotFoundException("Vuelo con id " + id + " no encontrado");
+        }
+
         VueloRegistroDTO vueloRegistroDTO = new VueloRegistroDTO(
                 (Integer) vuelo[0],
                 (Integer) vuelo[1],
@@ -62,7 +68,7 @@ public class VueloService {
         List<VueloDTO> vuelos = listarVuelos();
 
         if (!vuelos.isEmpty())
-            return ResponseEntity.ok(vuelos);
+            return ResponseEntity.status(HttpStatus.OK).body(vuelos);
 
         return ResponseEntity.noContent().build();
     }
@@ -91,24 +97,24 @@ public class VueloService {
     }
 
     public ResponseEntity<Object> getVuelo(UUID uuid) {
-        try {
-            Object[] result = vueloRepository.findVueloConDetallesPorId(uuid).get(0);
-            VueloDTO vuelo = new VueloDTO(
-                    (UUID) result[0],
-                    (String) result[1],
-                    (String) result[2],
-                    (String) result[3],
-                    (Integer) result[4],
-                    (Date) result[5],
-                    (Date) result[6],
-                    (Float) result[7]
-            );
+        Object[] result = vueloRepository.findVueloConDetallesPorId(uuid).get(0);
 
-
-            return ResponseEntity.status(HttpStatus.FOUND).body(vuelo);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body("Id no valido");
+        if (result == null) {
+            throw new VueloNotFoundException("Vuelo con id " + uuid + " no encontrado");
         }
+
+        VueloDTO vuelo = new VueloDTO(
+                (UUID) result[0],
+                (String) result[1],
+                (String) result[2],
+                (String) result[3],
+                (Integer) result[4],
+                (Date) result[5],
+                (Date) result[6],
+                (Float) result[7]
+        );
+
+        return ResponseEntity.status(HttpStatus.FOUND).body(vuelo);
     }
 
     public ResponseEntity<String> postVuelo(VueloRegistroDTO vueloRegistro) {
@@ -126,13 +132,9 @@ public class VueloService {
 
             vueloRepository.save(vuelo);
 
-            return ResponseEntity.ok("Vuelo creado exitosamente");
-        } catch (ChangeSetPersister.NotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error al crear el vuelo: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.CREATED).body("Vuelo creado exitosamente");
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -169,10 +171,15 @@ public class VueloService {
      *
      * @param id ID de la ciudad a buscar.
      * @return Objeto Ciudad si se encuentra, o lanza una excepción si no se encuentra.
-     * @throws ChangeSetPersister.NotFoundException Si la ciudad no se encuentra en el repositorio.
+     * @throws CiudadNotFoundException Si la ciudad no se encuentra en el repositorio.
      */
-    private Ciudad buscarCiudad(Integer id) throws ChangeSetPersister.NotFoundException {
-        return ciudadRepository.findById(id).orElseThrow(ChangeSetPersister.NotFoundException::new);
+    private Ciudad buscarCiudad(Integer id) {
+        Optional<Ciudad> ciudad = ciudadRepository.findById(id);
+
+        if (ciudad.isEmpty())
+            throw new CiudadNotFoundException("Ciudad no encontrada");
+
+        return ciudad.get();
     }
 
     /**
@@ -180,40 +187,44 @@ public class VueloService {
      *
      * @param id ID de la aerolínea a buscar.
      * @return Objeto Aerolinea si se encuentra, o lanza una excepción si no se encuentra.
-     * @throws ChangeSetPersister.NotFoundException Si la aerolínea no se encuentra en el repositorio.
+     * @throws AerolineaNotFoundException Si la aerolínea no se encuentra en el repositorio.
      */
-    private Aerolinea buscarAerolinea(Integer id) throws ChangeSetPersister.NotFoundException {
-        return aerolineaRepository.findById(id).orElseThrow(ChangeSetPersister.NotFoundException::new);
+    private Aerolinea buscarAerolinea(Integer id) {
+        Optional<Aerolinea> aerolinea = aerolineaRepository.findById(id);
+
+        if (aerolinea.isEmpty())
+            throw new AerolineaNotFoundException("Aerolinea no encontrada");
+
+        return aerolinea.get();
     }
 
     public ResponseEntity<String> patchVuelo(VueloRegistroDTO vueloRegistro, UUID uuid) {
         Optional<Vuelo> vuelo = vueloRepository.findById(uuid);
 
-        if (vuelo.isPresent()) {
-            try {
-                Vuelo vueloModificado = vuelo.get();
-                vueloModificado.setAerolinea(buscarAerolinea(vueloRegistro.aerolineaId()));
-                vueloModificado.setCiudadOrigen(buscarCiudad(vueloRegistro.ciudadOrigenId()));
-                vueloModificado.setCiudadDestino(buscarCiudad(vueloRegistro.ciudadDestinoId()));
-                vueloModificado.setPrecio(vueloRegistro.precio());
-                vueloModificado.setCantidadPasajes(vueloRegistro.cantidadPasajeros());
-                vueloModificado.setFechaIda(parseFecha(vueloRegistro.fechaIda()));
-                vueloModificado.setFechaVuelta(parseFecha(vueloRegistro.fechaVuelta()));
+        if (vuelo.isEmpty())
+            throw new VueloNotFoundException("Vuelo con id + " + uuid + " no encontrado");
 
-                vueloRepository.save(vueloModificado);
+        try {
+            Vuelo vueloModificado = vuelo.get();
+            vueloModificado.setAerolinea(buscarAerolinea(vueloRegistro.aerolineaId()));
+            vueloModificado.setCiudadOrigen(buscarCiudad(vueloRegistro.ciudadOrigenId()));
+            vueloModificado.setCiudadDestino(buscarCiudad(vueloRegistro.ciudadDestinoId()));
+            vueloModificado.setPrecio(vueloRegistro.precio());
+            vueloModificado.setCantidadPasajes(vueloRegistro.cantidadPasajeros());
+            vueloModificado.setFechaIda(parseFecha(vueloRegistro.fechaIda()));
+            vueloModificado.setFechaVuelta(parseFecha(vueloRegistro.fechaVuelta()));
 
-                return ResponseEntity.status(HttpStatus.ACCEPTED).body("Vuelo modificado exitosamente");
-            } catch (ChangeSetPersister.NotFoundException e) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(e.getMessage());
-            }
-        } else
-            return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).body("Vuelo no encontrado");
+            vueloRepository.save(vueloModificado);
+
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Vuelo modificado exitosamente");
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     public ResponseEntity<String> deleteVuelo(UUID uuid) {
         vueloRepository.deleteById(uuid);
-        return ResponseEntity.ok("Vuelo eliminado exitosamente");
+        return ResponseEntity.status(HttpStatus.OK).body("Vuelo eliminado exitosamente");
     }
 
 }

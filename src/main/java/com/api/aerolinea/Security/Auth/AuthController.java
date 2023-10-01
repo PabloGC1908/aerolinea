@@ -1,5 +1,6 @@
 package com.api.aerolinea.Security.Auth;
 
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -17,13 +18,13 @@ public class AuthController {
     }
 
     @PostMapping("/log-in")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
         log.info("Inicio de sesion: {}", request.email());
         return ResponseEntity.ok().body(authService.login(request));
     }
 
     @PostMapping("/sign-in")
-    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
         log.info("Registrando usuario: {}", request.email());
         return ResponseEntity.ok(authService.register(request));
     }

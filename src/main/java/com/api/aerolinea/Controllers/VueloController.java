@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,6 +44,7 @@ public class VueloController {
 
     @PostMapping
     @Transactional
+    @Secured({"ADMIN"})
     public ResponseEntity<String> postVuelo(@Valid @RequestBody VueloRegistroDTO vuelo) {
         logger.info("Recibiendo vuelo: {}", vuelo);
         return vueloService.postVuelo(vuelo);
@@ -50,12 +52,14 @@ public class VueloController {
 
     @PutMapping("/{id}")
     @Transactional
+    @Secured({"ADMIN"})
     public ResponseEntity<String> putVuelo(@Valid @RequestBody VueloRegistroDTO vuelo, @PathVariable UUID id) {
         logger.info("Actualizando vuelo con id: {}", id);
         return vueloService.patchVuelo(vuelo, id);
     }
 
     @DeleteMapping("/{id}")
+    @Secured({"ADMIN"})
     public ResponseEntity<String> deleteVuelo(@Valid @PathVariable UUID id) {
         logger.warn("Eliminado el vuelo con id: {}", id);
         return vueloService.deleteVuelo(id);

@@ -1,5 +1,7 @@
 package com.api.aerolinea.Entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,6 +24,7 @@ public class Boleto {
     private UUID id;
     @ManyToOne
     @JoinColumn(name = "usuario_id")
+    @JsonIgnoreProperties("boletos")
     private User usuario;
     @ManyToOne
     @JoinColumn(name = "vuelo_id")

@@ -1,5 +1,6 @@
 package com.api.aerolinea.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,5 +21,6 @@ public class Aerolinea {
     private Integer id;
     private String aerolinea;
     @OneToMany(mappedBy = "aerolinea")
+    @JsonIgnoreProperties("vuelos")
     private List<Vuelo> vuelos;
 }

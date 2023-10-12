@@ -1,6 +1,8 @@
 package com.api.aerolinea.Mail;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Component;
 
@@ -8,6 +10,7 @@ import java.util.Properties;
 
 
 public class JavaMailSender {
+    private Environment environment;
 
     public JavaMailSenderImpl getJavaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
@@ -15,8 +18,8 @@ public class JavaMailSender {
         mailSender.setHost("stmp.gmail.com");
         mailSender.setPort(587);
 
-        mailSender.setUsername("pguerracamana@gmail.com");
-        mailSender.setPassword("guerra2350");
+        mailSender.setUsername("email");
+        mailSender.setPassword("contrasenia");
 
         Properties properties = mailSender.getJavaMailProperties();
 

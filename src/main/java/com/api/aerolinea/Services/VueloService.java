@@ -204,6 +204,9 @@ public class VueloService {
         if (vuelo.isEmpty())
             throw new VueloNotFoundException("Vuelo con id + " + uuid + " no encontrado");
 
+        if (Objects.equals(vueloRegistro.ciudadOrigenId(), vueloRegistro.ciudadDestinoId()))
+            throw new RuntimeException("No se puede agregar un vuelo con la misma ciudad");
+
         try {
             Vuelo vueloModificado = vuelo.get();
             vueloModificado.setAerolinea(buscarAerolinea(vueloRegistro.aerolineaId()));
@@ -223,6 +226,11 @@ public class VueloService {
     }
 
     public ResponseEntity<String> deleteVuelo(UUID uuid) {
+
+        if (vueloRepository.findBoletosInVueloId(uuid) > 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se puede eliminar un vuelo con boletos generados");
+        }
+
         vueloRepository.deleteById(uuid);
         return ResponseEntity.status(HttpStatus.OK).body("Vuelo eliminado exitosamente");
     }

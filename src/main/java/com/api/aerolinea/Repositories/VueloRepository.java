@@ -50,4 +50,7 @@ public interface VueloRepository extends JpaRepository<Vuelo, UUID> {
             "FROM Vuelo vuelo " +
             "WHERE vuelo.uuid = :id")
     List<Object[]> findVueloIdsById(@Param("id") UUID id);
+
+    @Query("SELECT COUNT(*) FROM Boleto boleto WHERE boleto.vuelo.uuid = :id")
+    Integer findBoletosInVueloId(@Param("id") UUID id);
 }

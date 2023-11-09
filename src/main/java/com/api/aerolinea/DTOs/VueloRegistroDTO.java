@@ -7,6 +7,7 @@ public record VueloRegistroDTO(
         @NotNull
         Integer aerolineaId,
         @NotNull
+        @Min(message = "La cantidad de pasajeros no puede ser negativo", value = 0)
         Integer cantidadPasajeros,
         @NotNull
         Integer ciudadDestinoId,

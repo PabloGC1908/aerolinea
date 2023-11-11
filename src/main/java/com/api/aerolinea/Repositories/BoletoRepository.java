@@ -35,8 +35,7 @@ public interface BoletoRepository extends JpaRepository<Boleto, UUID> {
             " INNER JOIN Vuelo vuelo ON vuelo.uuid = boleto.vuelo.uuid")
     List<Object[]> findAllBoletos();
 
-    @Query("SELECT boleto.id," +
-            " boleto.usuario.nombre,"+
+    @Query("SELECT boleto.usuario.nombre,"+
             " boleto.usuario.apellido," +
             " vuelo.fechaIda," +
             " boleto.fechaCompra," +

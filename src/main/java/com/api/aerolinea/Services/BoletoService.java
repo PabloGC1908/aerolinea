@@ -161,12 +161,11 @@ public class BoletoService {
 
         for (Object[] result : resultSet) {
             ReservasDTO boleto = new ReservasDTO(
-                    (UUID) result[0],
+                    (String) result[0],
                     (String) result[1],
-                    (String) result[2],
+                    (Date) result[2],
                     (Date) result[3],
-                    (Date) result[4],
-                    (Float) result[5]
+                    (Float) result[4]
             );
 
             boletos.add(boleto);

@@ -24,6 +24,8 @@ public interface BoletoRepository extends JpaRepository<Boleto, UUID> {
     List<Object[]> findBoletoByUsuarioId(@Param("id") UUID id);
 
     @Query("SELECT boleto.id," +
+            " boleto.usuario.nombre,"+
+            " boleto.usuario.apellido," +
             " vuelo.ciudadOrigen.ciudad," +
             " vuelo.ciudadDestino.ciudad," +
             " vuelo.fechaIda," +
@@ -32,4 +34,14 @@ public interface BoletoRepository extends JpaRepository<Boleto, UUID> {
             " FROM Boleto boleto" +
             " INNER JOIN Vuelo vuelo ON vuelo.uuid = boleto.vuelo.uuid")
     List<Object[]> findAllBoletos();
+
+    @Query("SELECT boleto.id," +
+            " boleto.usuario.nombre,"+
+            " boleto.usuario.apellido," +
+            " vuelo.fechaIda," +
+            " boleto.fechaCompra," +
+            " boleto.vuelo.precio" +
+            " FROM Boleto boleto" +
+            " INNER JOIN Vuelo vuelo ON vuelo.uuid = boleto.vuelo.uuid")
+    List<Object[]> findAllReservaVuelos();
 }

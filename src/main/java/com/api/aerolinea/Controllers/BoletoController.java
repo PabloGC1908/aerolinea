@@ -2,6 +2,7 @@ package com.api.aerolinea.Controllers;
 
 import com.api.aerolinea.DTOs.BoletoDTO;
 import com.api.aerolinea.DTOs.BoletoRegistroDTO;
+import com.api.aerolinea.DTOs.ReservasDTO;
 import com.api.aerolinea.Services.BoletoService;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
@@ -26,6 +27,11 @@ public class BoletoController {
     public ResponseEntity<List<BoletoDTO>> getBoletosPorUsuario(@PathVariable UUID id) {
         logger.info("Enviando boleto con id: {}", id);
         return boletoService.getBoletoUsuario(id);
+    }
+
+    @GetMapping("/reservas")
+    public ResponseEntity<List<ReservasDTO>> getReservasVuelos() {
+        return boletoService.getReservaVuelos();
     }
 
     @GetMapping

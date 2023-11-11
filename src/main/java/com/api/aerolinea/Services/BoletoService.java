@@ -2,6 +2,7 @@ package com.api.aerolinea.Services;
 
 import com.api.aerolinea.DTOs.BoletoDTO;
 import com.api.aerolinea.DTOs.BoletoRegistroDTO;
+import com.api.aerolinea.DTOs.ReservasDTO;
 import com.api.aerolinea.Entities.Boleto;
 import com.api.aerolinea.Entities.User;
 import com.api.aerolinea.Entities.Vuelo;
@@ -140,6 +141,26 @@ public class BoletoService {
 
         for (Object[] result : resultSet) {
             BoletoDTO boleto = new BoletoDTO(
+                    (UUID) result[0],
+                    (String) result[1],
+                    (String) result[2],
+                    (Date) result[3],
+                    (Date) result[4],
+                    (Float) result[5]
+            );
+
+            boletos.add(boleto);
+        }
+
+        return ResponseEntity.ok(boletos);
+    }
+
+    public ResponseEntity<List<ReservasDTO>> getReservaVuelos() {
+        List<Object[]> resultSet = boletoRepository.findAllReservaVuelos();
+        List<ReservasDTO> boletos = new ArrayList<>();
+
+        for (Object[] result : resultSet) {
+            ReservasDTO boleto = new ReservasDTO(
                     (UUID) result[0],
                     (String) result[1],
                     (String) result[2],
